@@ -17,7 +17,7 @@ module Devise
             name, cookie = CookieHelper.new.build(env[ENV_KEY])
             Rack::Utils.set_cookie_header!(headers, name, cookie)
           elsif token_should_be_revoked?(env)
-            token = Warden::JWTAuth::HeaderParser.from_env(env)
+            token = CookieHelper.new.read_from(cookies)
             Warden::JWTAuth::TokenRevoker.new.call(token)
             name, cookie = CookieHelper.new.build(nil)
             Rack::Utils.set_cookie_header!(headers, name, cookie)
